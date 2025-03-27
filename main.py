@@ -4,6 +4,10 @@ import base64
 import json
 import time
 from mistralai import Mistral
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 st.set_page_config(layout="wide", page_title="Mistral OCR App", page_icon="🖥️")
 st.title("Mistral OCR App")
@@ -13,10 +17,18 @@ with st.expander("Expand Me"):
     """)
 
 # 1. API Key Input
-api_key = st.text_input("Enter your Mistral API Key", type="password")
+# api_key = st.text_input("Enter your Mistral API Key", type="password")
+# if not api_key:
+#     st.info("Please enter your API key to continue.")
+#     st.stop()
+
+# Get API key from environment variable
+api_key = os.getenv("MISTRAL_API_KEY")
 if not api_key:
-    st.info("Please enter your API key to continue.")
+    st.error("MISTRAL_API_KEY not found in .env file.")
     st.stop()
+else:
+    st.success("MISTRAL API key loaded successfully from .env file.")
 
 # Initialize session state variables for persistence
 if "ocr_result" not in st.session_state:
